@@ -1,102 +1,68 @@
-
-import torch
-import torch.nn as nn
-import numpy as np
 import os
+import argparse
+import numpy as np
+import torch
+
+from model import KLABaseline
 
 
-class ResidualBlock(nn.Module):
+def main():
 
-    def __init__(self, channels):
-        super().__init__()
+    parser = argparse.ArgumentParser(
+        description="Restore a single degraded image"
+    )
 
-        self.conv1 = nn.Conv2d(
-            channels,
-            channels,
-            kernel_size=3,
-            padding=1
-        )
+    parser.add_argument(
+        "--model",
+        required=True,
+        help="Path to trained .pth model"
+    )
 
-        self.relu = nn.ReLU(inplace=True)
+    parser.add_argument(
+        "--input",
+        required=True,
+        help="Path to input .npy image"
+    )
 
-        self.conv2 = nn.Conv2d(
-            channels,
-            channels,
-            kernel_size=3,
-            padding=1
-        )
+    parser.add_argument(
+        "--output",
+        required=True,
+        help="Path to output .npy image"
+    )
 
-    def forward(self, x):
-
-        residual = x
-
-        out = self.conv1(x)
-        out = self.relu(out)
-        out = self.conv2(out)
-
-        return out + residual
-
-
-class ResidualRestorationNet(nn.Module):
-
-    def __init__(self, num_blocks=8):
-        super().__init__()
-
-        self.input_conv = nn.Conv2d(
-            1, 64,
-            kernel_size=3,
-            padding=1
-        )
-
-        self.blocks = nn.Sequential(
-            *[ResidualBlock(64) for _ in range(num_blocks)]
-        )
-
-        self.output_conv = nn.Conv2d(
-            64, 1,
-            kernel_size=3,
-            padding=1
-        )
-
-    def forward(self, x):
-
-        residual = x
-
-        out = self.input_conv(x)
-        out = self.blocks(out)
-        out = self.output_conv(out)
-
-        return out + residual
-
-
-def restore_image(
-    model_path,
-    input_path,
-    output_path
-):
+    args = parser.parse_args()
 
     device = torch.device(
-        "cuda" if torch.cuda.is_available()
+        "cuda"
+        if torch.cuda.is_available()
         else "cpu"
     )
 
-    model = ResidualRestorationNet().to(device)
+    print("Device:", device)
+
+    model = KLABaseline().to(device)
 
     model.load_state_dict(
         torch.load(
-            model_path,
+            args.model,
             map_location=device
         )
     )
 
     model.eval()
 
-    image = np.load(input_path)
-
-    image = torch.tensor(
-        image,
-        dtype=torch.float32
+    image = np.load(
+        args.input
     )
+
+    print(
+        "Input shape:",
+        image.shape
+    )
+
+    image = torch.from_numpy(
+        image
+    ).float()
 
     if image.ndim == 2:
         image = image.unsqueeze(0)
@@ -107,19 +73,39 @@ def restore_image(
 
     with torch.no_grad():
 
-        restored = model(image)
+        restored = model(
+            image
+        )
 
-    restored = restored.squeeze().cpu().numpy()
+    restored = (
+        restored
+        .squeeze()
+        .cpu()
+        .numpy()
+    )
+
+    os.makedirs(
+        os.path.dirname(
+            args.output
+        ) or ".",
+        exist_ok=True
+    )
 
     np.save(
-        output_path,
+        args.output,
         restored
     )
 
     print(
+        "Output shape:",
+        restored.shape
+    )
+
+    print(
         "Restored image saved:",
-        output_path
+        args.output
     )
 
 
-print("Restoration script created successfully")
+if __name__ == "__main__":
+    main()
