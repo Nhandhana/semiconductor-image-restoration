@@ -2,7 +2,7 @@
 AI-based semiconductor image restoration using a Residual CNN for low-resolution degraded inspection images.
 # Semiconductor Image Restoration using Deep Learning
 
-## 🚀 Overview
+## Overview
 
 This project addresses the problem of restoring degraded semiconductor inspection images using deep learning.
 
@@ -14,13 +14,13 @@ The trained model reconstructs a cleaner and higher-quality image while preservi
 
 ---
 
-## 🎯 Problem Statement
+## Problem Statement
 
 Develop an efficient deep-learning-based solution to restore degraded semiconductor inspection images and improve their visual quality for downstream inspection and defect analysis.
 
 ---
 
-## 💡 Proposed Solution
+## Proposed Solution
 
 We use a **Residual CNN-based image restoration model**.
 
@@ -50,7 +50,7 @@ Quality Evaluation
 
 ---
 
-## 🧠 Model Architecture
+##  Model Architecture
 
 The model consists of convolutional layers and residual blocks.
 
@@ -65,7 +65,7 @@ Residual learning helps the network focus on recovering lost image information w
 
 ---
 
-## 📊 Dataset
+## Dataset
 
 The dataset contains degraded semiconductor images and their corresponding ground-truth images.
 
@@ -84,7 +84,7 @@ The ground-truth images are used during training to calculate the reconstruction
 
 ---
 
-## 🔧 Technologies Used
+## Technologies Used
 
 * Python
 * PyTorch
@@ -96,7 +96,7 @@ The ground-truth images are used during training to calculate the reconstruction
 
 ---
 
-## 📈 Evaluation
+## Evaluation
 
 The model is evaluated using standard image-restoration metrics:
 
@@ -114,7 +114,7 @@ Higher PSNR indicates better image quality.
 
 ---
 
-## 🏆 Current Results
+## Current Results
 
 The trained model was evaluated on the test images.
 
@@ -133,7 +133,7 @@ The difference between these values comes from evaluating different subsets/stag
 
 ---
 
-## 🎥 Demonstration
+## Demonstration
 
 A demonstration video is included to show the image restoration process.
 
@@ -147,7 +147,7 @@ The demonstration can be found in the `demo/` directory.
 
 ---
 
-## ⚙️ Project Structure
+## Project Structure
 
 ```text
 Semicon-Image-Restoration/
@@ -174,7 +174,7 @@ Semicon-Image-Restoration/
 
 ---
 
-## ▶️ How to Run
+## How to Run
 
 ### 1. Install dependencies
 
@@ -212,7 +212,7 @@ python create_demo.py
 
 ---
 
-## ⭐ Key Features
+## Key Features
 
 * Deep-learning-based image restoration
 * Residual learning architecture
@@ -224,7 +224,7 @@ python create_demo.py
 
 ---
 
-## 🔬 Uniqueness
+## Uniqueness
 
 The key idea is to use **residual learning specifically for semiconductor inspection image restoration**.
 
@@ -234,7 +234,7 @@ This makes the restoration process conceptually simple, computationally efficien
 
 ---
 
-## 🔮 Future Improvements
+## Future Improvements
 
 Potential improvements include:
 
